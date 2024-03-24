@@ -1,0 +1,106 @@
+PS C:\Teach_Linux_Pro\Ansible\ansible1> vagrant up
+Bringing machine 'nginx' up with 'hyperv' provider...
+==> nginx: Verifying Hyper-V is enabled...
+==> nginx: Verifying Hyper-V is accessible...
+==> nginx: Importing a Hyper-V instance
+    nginx: Creating and registering the VM...
+    nginx: Successfully imported VM
+    nginx: Please choose a switch to attach to your Hyper-V instance.
+    nginx: If none of these are appropriate, please open the Hyper-V manager
+    nginx: to create a new virtual switch.
+    nginx:
+    nginx: 1) NATSwitch
+    nginx: 2) Lan
+    nginx: 3) Default Switch
+    nginx: 4) WSL
+    nginx:
+    nginx: What switch would you like to use? 2
+    nginx: Configuring the VM...
+    nginx: Setting VM Enhanced session transport type to disabled/default (VMBus)
+==> nginx: Starting the machine...
+==> nginx: Waiting for the machine to report its IP address...
+    nginx: Timeout: 120 seconds
+    nginx: IP: fe80::215:5dff:fe01:3e4e
+==> nginx: Waiting for machine to boot. This may take a few minutes...
+    nginx: SSH address: 192.168.1.56:22
+    nginx: SSH username: vagrant
+    nginx: SSH auth method: private key
+    nginx:
+    nginx: Vagrant insecure key detected. Vagrant will automatically replace
+    nginx: this with a newly generated keypair for better security.
+    nginx:
+    nginx: Inserting generated public key within guest...
+    nginx: Removing insecure key from the guest if it's present...
+    nginx: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> nginx: Machine booted and ready!
+==> nginx: Setting hostname...
+==> nginx: Running provisioner: shell...
+    nginx: Running: inline script
+PS C:\Teach_Linux_Pro\Ansible\ansible1>
+
+PS C:\Teach_Linux_Pro\Ansible\ansible1> vagrant ssh
+vagrant@nginx:~$ hostname -I
+192.168.1.56
+
+PS C:\Teach_Linux_Pro\Ansible\ansible1> vagrant ssh-config
+Host nginx
+  HostName 192.168.1.56
+  User vagrant
+  Port 22
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile C:/Teach_Linux_Pro/Ansible/ansible1/.vagrant/machines/nginx/hyperv/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+  PubkeyAcceptedKeyTypes +ssh-rsa
+  HostKeyAlgorithms +ssh-rsa
+
+
+root@ansible:/home/sasha/ansible1# ansible-playbook nginx.yml
+
+PLAY [NGINX | Install and configure NGINX] ****************************************************************************************************************************************
+
+TASK [Gathering Facts] ************************************************************************************************************************************************************
+ok: [nginx]
+
+TASK [update] *********************************************************************************************************************************************************************
+changed: [nginx]
+
+TASK [NGINX | Install NGINX] ******************************************************************************************************************************************************
+ok: [nginx]
+
+TASK [NGINX | Create NGINX config file from template] *****************************************************************************************************************************
+ok: [nginx]
+
+PLAY RECAP ************************************************************************************************************************************************************************
+nginx                      : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+root@ansible:/home/sasha/ansible1# curl is http://192.168.1.56:8080
+curl: (6) Could not resolve host: is
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+root@ansible:/home/sasha/ansible1#
